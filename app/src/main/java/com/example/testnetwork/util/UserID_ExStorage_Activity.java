@@ -1,4 +1,4 @@
-package com.example.uidstorage;
+package com.example.testnetwork.util;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +10,7 @@ public class UserID_ExStorage_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.);
 
         UserID_ExStorage_Table db = new UserID_ExStorage_Table(this);
         db.addUserID(new UserID_ExStorage_Method(1012, "Alice", "888"));

@@ -1,21 +1,23 @@
-package com.example.uidstorage;
+package com.example.testnetwork.util;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 
 public class UserID_ExStorage_Table extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "userID_LocalStorage";
     private static final String TABLE_CONTACTS = "tontacts";
-    private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
-    private static final String KEY_PH_NO = "phone_number";
+    //private static final String KEY_ACCOUNT = "account";
+    //private static final String KEY_PASSWORD = "password";
+    //private static final String KEY_GENDER = "gender";
+    //private static final String KEY_AGE = "age";
 
     public UserID_ExStorage_Table(Context context) {
+        //创建数据库
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -24,6 +26,7 @@ public class UserID_ExStorage_Table extends SQLiteOpenHelper {
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
                 + KEY_ID + "INTEGER PRIMARY KEY," + KEY_NAME + "TEXT,"
                 + KEY_PH_NO + "TEXT)";
+        //创建表名
         db.execSQL(CREATE_USER_TABLE);
     }
 
