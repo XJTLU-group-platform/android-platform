@@ -10,7 +10,8 @@ public class UserID_ExStorage_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+// 无activity_main layout
+//        setContentView(R.layout.activity_main);
 
         UserID_ExStorage_Table db = new UserID_ExStorage_Table(this);
         db.addUserID(new UserID_ExStorage_Method(1012, "Alice", "888"));
