@@ -84,8 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .add("uage",String.valueOf(uAge))
                     .build();
             // 发起请求，同时定义并传入onResponse回调
-            SendRequest.sendRequestsWithOkHttp(requestBody,"http://10.0.2.2:8080/user/register",this::onResponse);
-
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/user/register",this::onResponse);
 
 
         }
@@ -119,9 +118,9 @@ public class RegisterActivity extends AppCompatActivity {
         // 网络请求异常处理部分
         try {
             Looper.prepare();
-            if (jsonObject.has("status") || SendRequest.mock) {
+            if (jsonObject.has("status")) {
                 String statuscode=jsonObject.getString("status");
-                if (statuscode.equals("200") || SendRequest.mock) {
+                if (statuscode.equals("200")) {
                     // 如果成功
                     // TODO: 把uid保存到本地
                     String uid;
