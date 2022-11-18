@@ -10,6 +10,7 @@ import com.example.testnetwork.util.SendRequest;
 import com.example.testnetwork.util.ToastUtil;
 import com.example.testnetwork.util.UidStorage;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,14 +45,11 @@ public class HomeActivity extends AppCompatActivity {
     private String onHomeResponse(JSONObject jsonObject){
         try{
             // 如果成功(通常来说每页只需要修改成功后的逻辑，下面status不等于200的处理都是一样的
-            List<JSONObject> groupinfo;
+            JSONArray groupinfo;
             if(SendRequest.mock){
-                groupinfo=new ArrayList<JSONObject>();
-                groupinfo.add(new JSONObject("{\"gid\":\"1\",\"gtag\":\"taxi\",\"gtitle\":\"go XJTLU\",\"gdescription\":\"gogogogo\",\"gnumber\":\"8\",\"gnownum\":\"4\"}"));
-                groupinfo.add(new JSONObject("{\"gid\":\"2\",\"gtag\":\"study\",\"gtitle\":\"CAN301\",\"gdescription\":\"study together\",\"gnumber\":\"6\",\"gnownum\":\"3\"}"));
-                groupinfo.add(new JSONObject("{\"gid\":\"3\",\"gtag\":\"taxi\",\"gtitle\":\"go Moon\",\"gdescription\":\"travel to the moon\",\"gnumber\":\"4\",\"gnownum\":\"3\"}"));
+                groupinfo=new JSONArray("[{\"gid\":\"1\",\"gtag\":\"taxi\",\"gtitle\":\"go XJTLU\",\"gdescription\":\"gogogogo\",\"gnumber\":\"8\",\"gnownum\":\"4\"},{\"gid\":\"2\",\"gtag\":\"study\",\"gtitle\":\"CAN301\",\"gdescription\":\"study together\",\"gnumber\":\"6\",\"gnownum\":\"3\"},{\"gid\":\"3\",\"gtag\":\"taxi\",\"gtitle\":\"go Moon\",\"gdescription\":\"travel to the moon\",\"gnumber\":\"4\",\"gnownum\":\"3\"}]");
             }else{
-                groupinfo=(List<JSONObject>) jsonObject.get("data");
+                groupinfo=(JSONArray)jsonObject.get("data");
             }
             // TODO: 把groupinfo这个LIST渲染到页面里
             System.out.println(groupinfo.toString());

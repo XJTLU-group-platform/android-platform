@@ -23,7 +23,7 @@ import okhttp3.Response;
 public class SendRequest {
 
     // 模拟模式，该参数true时会强制执行成功响应后的分支
-    public static final boolean mock=true;
+    public static final boolean mock=false;
 
     private static final String rooturl="http://10.0.2.2:8080";
 
