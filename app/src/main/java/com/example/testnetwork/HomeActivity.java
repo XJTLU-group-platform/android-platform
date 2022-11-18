@@ -8,6 +8,7 @@ import android.os.Looper;
 
 import com.example.testnetwork.util.SendRequest;
 import com.example.testnetwork.util.ToastUtil;
+import com.example.testnetwork.util.UidStorage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +28,8 @@ public class HomeActivity extends AppCompatActivity {
 
         // 构造请求参数
         RequestBody requestBody=new FormBody.Builder().build();
+        // 显示uid
+        ToastUtil.showMsg(HomeActivity.this, "Uid stroed in disk: "+UidStorage.getUid(HomeActivity.this));
         // 请求首页内容
         SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse);
     }

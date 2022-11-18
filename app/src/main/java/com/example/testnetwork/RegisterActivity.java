@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 
 import com.example.testnetwork.util.SendRequest;
 import com.example.testnetwork.util.ToastUtil;
+import com.example.testnetwork.util.UidStorage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,11 +53,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         // if there exist local uid, jump to homepage directly
         //TODO: detect local uid
-//        if(uidDetected){
-//            Intent intent = null;
-//            intent = new Intent(RegisterActivity.this, HomeActivity.class);
-//            startActivity(intent);
-//        }
+        if(UidStorage.hasUid(RegisterActivity.this)){
+            Intent intent = null;
+            intent = new Intent(RegisterActivity.this, HomeActivity.class);
+            startActivity(intent);
+        }
         mBtnRegister.setOnClickListener(this::onRegisterClick);
         mBtnReset.setOnClickListener(this::onResetClick);
     }
@@ -129,6 +130,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }else{
                         uid=jsonObject.getString("uid"); // 实际
                     }
+                    UidStorage.saveUid(uid,RegisterActivity.this);
                     ToastUtil.showMsg(RegisterActivity.this, "uid get!"+uid);
                     // 跳转页面
                     Intent intent = null;
