@@ -11,7 +11,7 @@ public class UserID_ExStorage_Table extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "userID_LocalStorage";
     private static final String TABLE_CONTACTS = "tontacts";
     private static final String KEY_NAME = "name";
-    //private static final String KEY_ACCOUNT = "account";
+    private static final String KEY_ACCOUNT = "account";
     //private static final String KEY_PASSWORD = "password";
     //private static final String KEY_GENDER = "gender";
     //private static final String KEY_AGE = "age";
@@ -24,8 +24,8 @@ public class UserID_ExStorage_Table extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
-                + KEY_ID + "INTEGER PRIMARY KEY," + KEY_NAME + "TEXT,"
-                + KEY_PH_NO + "TEXT)";
+                + KEY_NAME + "INTEGER PRIMARY KEY," + KEY_NAME + "TEXT,"
+                + KEY_ACCOUNT + "TEXT)";
         //创建表名
         db.execSQL(CREATE_USER_TABLE);
     }
@@ -42,7 +42,7 @@ public class UserID_ExStorage_Table extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, userID.getName());
-        values.put(KEY_PH_NO, userID.getPhoneNumber());
+        values.put(KEY_ACCOUNT, userID.getAccount());
 
         db.insert(TABLE_CONTACTS, null, values);
         db.close();
@@ -51,12 +51,12 @@ public class UserID_ExStorage_Table extends SQLiteOpenHelper {
     public UserID_ExStorage_Method getUserID(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_CONTACTS, new String[] {
-                KEY_ID, KEY_NAME, KEY_PH_NO}, KEY_ID + "=?",
+                KEY_NAME, KEY_NAME, KEY_ACCOUNT}, KEY_NAME + "=?",
                 new String[] {String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
-        UserID_ExStorage_Method contact = new UserID_ExStorage_Method(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2));
+        UserID_ExStorage_Method contact = new UserID_ExStorage_Method(cursor.getString(0),
+                cursor.getString(1), cursor.getString(2), cursor.getString(3), Integer.parseInt(cursor.getString(4)));
         return contact;
     }
 }
