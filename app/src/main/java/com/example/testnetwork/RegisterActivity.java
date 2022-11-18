@@ -51,15 +51,21 @@ public class RegisterActivity extends AppCompatActivity {
         mRbMale = findViewById(R.id.radioMale);
         mRbFemale = findViewById(R.id.radioFemale);
 
+
+        mBtnRegister.setOnClickListener(this::onRegisterClick);
+        mBtnReset.setOnClickListener(this::onResetClick);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         // if there exist local uid, jump to homepage directly
-        //TODO: detect local uid
+        // detect local uid
         if(UidStorage.hasUid(RegisterActivity.this)){
             Intent intent = null;
             intent = new Intent(RegisterActivity.this, HomeActivity.class);
             startActivity(intent);
         }
-        mBtnRegister.setOnClickListener(this::onRegisterClick);
-        mBtnReset.setOnClickListener(this::onResetClick);
     }
 
     public void onRegisterClick(View view){
@@ -85,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .add("uage",String.valueOf(uAge))
                     .build();
             // 发起请求，同时定义并传入onResponse回调
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/user/register",this::onResponse);
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/user/register",this::onResponse,RegisterActivity.this);
 
 
         }
@@ -114,48 +120,25 @@ public class RegisterActivity extends AppCompatActivity {
 
     // 注册请求的回调，输入的是一个json类型的响应参数
     private String onResponse(JSONObject jsonObject){
-        // 如果是模拟模式（SendRequest.mock为true，会强制执行成功后的分支
-        System.out.println("Response: "+jsonObject.toString());
-        // 网络请求异常处理部分
-        try {
-            Looper.prepare();
-            if (jsonObject.has("status")) {
-                String statuscode=jsonObject.getString("status");
-                if (statuscode.equals("200")) {
-                    // 如果成功
-                    // TODO: 把uid保存到本地
-                    String uid;
-                    if(SendRequest.mock){
-                        uid="mock0149"; // 模拟
-                    }else{
-                        uid=jsonObject.getString("uid"); // 实际
-                    }
-                    UidStorage.saveUid(uid,RegisterActivity.this);
-                    ToastUtil.showMsg(RegisterActivity.this, "uid get!"+uid);
-                    // 跳转页面
-                    Intent intent = null;
-                    intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    ToastUtil.showMsg(RegisterActivity.this, "200: Register successfully, welcome!");
-                } else if (statuscode.equals("300")) {
-                    // 如果已知原因失败
-                    if (jsonObject.has("message")) {
-                        ToastUtil.showMsg(RegisterActivity.this, jsonObject.getString("message"));
-                    } else {
-                        ToastUtil.showMsg(RegisterActivity.this, "300: failed because of unknown reason");
-                    }
-                } else if (statuscode.equals("400")) {
-                    // 如果服务器内发生未知错误
-                    ToastUtil.showMsg(RegisterActivity.this, "400: unknown error");
-                }
+        try{
+            // 如果成功
+            // 把uid保存到本地
+            String uid;
+            if(SendRequest.mock){
+                uid="mock0149"; // 模拟
             }else{
-                // 如果服务器响应格式不正确,无status关键字
-                ToastUtil.showMsg(RegisterActivity.this, "300: uncorrect response format(no status)");
+                uid=jsonObject.getString("uid"); // 实际
             }
-            Looper.loop();
+            UidStorage.saveUid(uid,RegisterActivity.this);
+            ToastUtil.showMsg(RegisterActivity.this, "uid get!"+uid);
+            // 跳转页面
+            Intent intent = null;
+            intent = new Intent(RegisterActivity.this, HomeActivity.class);
+            startActivity(intent);
+            ToastUtil.showMsg(RegisterActivity.this, "200: Register successfully, welcome!");
         }catch (JSONException e){
-        System.out.println(e.toString());
-    }
+            e.printStackTrace();
+        }
         return null;
     }
 

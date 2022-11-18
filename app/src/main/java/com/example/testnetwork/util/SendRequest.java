@@ -1,7 +1,14 @@
 package com.example.testnetwork.util;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Looper;
 
+import com.example.testnetwork.HomeActivity;
+import com.example.testnetwork.RegisterActivity;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -20,7 +27,7 @@ public class SendRequest {
 
     private static final String rooturl="http://10.0.2.2:8080";
 
-    public static void sendRequestsWithOkHttp(RequestBody requestBody, String targetUrl, Function<JSONObject, String> recall){
+    public static void sendRequestsWithOkHttp(RequestBody requestBody, String targetUrl, Function<JSONObject, String> recall, Context ctx){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -43,17 +50,14 @@ public class SendRequest {
                         Response response = client.newCall(request).execute();
                         String responseData = response.body().string();
                         JSONObject jsonObject=new JSONObject(responseData);
-                        // 回到主线程修改UI
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            recall.apply(jsonObject);
-                        }
+                        // 响应判断
+                        handleResponse(ctx,recall,jsonObject);
                     }else{
                         // mock
                         JSONObject jsonObject=new JSONObject("{\"status\":\"200\"}");
-                        // 回到主线程修改UI
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            recall.apply(jsonObject);
-                        }
+                        // 响应判断
+                        handleResponse(ctx,recall,jsonObject);
+
                     }
 
                 } catch(Exception e)
@@ -62,5 +66,38 @@ public class SendRequest {
                 }
             }
         }).start();
+    }
+
+    private static void handleResponse(Context ctx,Function<JSONObject, String> recall,JSONObject jsonObject){
+        // 如果是模拟模式（SendRequest.mock为true，会强制执行成功后的分支
+        System.out.println("Response: "+jsonObject.toString());
+        // 网络请求异常处理部分
+        try {
+            Looper.prepare();
+            if (jsonObject.has("status")) {
+                String statuscode=jsonObject.getString("status");
+                if (statuscode.equals("200")) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        recall.apply(jsonObject);
+                    }
+                } else if (statuscode.equals("300")) {
+                    // 如果已知原因失败
+                    if (jsonObject.has("message")) {
+                        ToastUtil.showMsg(ctx, jsonObject.getString("message"));
+                    } else {
+                        ToastUtil.showMsg(ctx, "300: failed because of unknown reason");
+                    }
+                } else if (statuscode.equals("400")) {
+                    // 如果服务器内发生未知错误
+                    ToastUtil.showMsg(ctx, "400: unknown error");
+                }
+            }else{
+                // 如果服务器响应格式不正确,无status关键字
+                ToastUtil.showMsg(ctx, "300: uncorrect response format(no status)");
+            }
+            Looper.loop();
+        }catch (JSONException e){
+            System.out.println(e.toString());
+        }
     }
 }
