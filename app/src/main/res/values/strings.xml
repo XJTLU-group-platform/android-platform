@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">CAN301-Group</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string-array name="tags">
+        <item>Coursework 课程作业</item>
+        <item>Carpool 拼车</item>
+        <item>Activity 活动</item>
+    </string-array>
 </resources>

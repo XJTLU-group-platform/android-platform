@@ -4,33 +4,55 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.testnetwork.util.SendRequest;
 import com.example.testnetwork.util.ToastUtil;
 import com.example.testnetwork.util.UidStorage;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
-public class HomeActivity extends AppCompatActivity {
 
+public class HomeActivity extends AppCompatActivity {
+    private ImageView mIbHead;
+    private SlideMenu slideMenu;
+    private FloatingActionButton addGroupBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         // 显示uid
-        ToastUtil.showMsg(HomeActivity.this, "Uid stroed in disk: "+UidStorage.getUid(HomeActivity.this));
+        ToastUtil.showMsg(HomeActivity.this, "Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
 
+        mIbHead = findViewById(R.id.userImage);
+        slideMenu = findViewById(R.id.slideMenu);
+        addGroupBtn = findViewById(R.id.addBtn);
+
+
+        mIbHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slideMenu.switchMenu();
+            }
+        });
+
+        addGroupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = null;
+                intent = new Intent(HomeActivity.this, AddGroupActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+
     tools:context=".HomeActivity">
-    <LinearLayout
+
+    <com.example.testnetwork.SlideMenu
+        android:id="@+id/slideMenu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="219dp"
-        tools:layout_editor_absoluteY="207dp"
-        android:padding="50dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="match_parent">
+<!--        菜单界面布局-->
+        <include layout="@layout/layout_slide_menu"/>
+<!--        主界面布局-->
+        <include layout="@layout/layout_main"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="XGroup Home"
-                android:textSize="28sp" />
+    </com.example.testnetwork.SlideMenu>
 
-
-        </LinearLayout>
-
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -1,20 +1,14 @@
 package com.example.testnetwork.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Looper;
-
-import com.example.testnetwork.HomeActivity;
-import com.example.testnetwork.RegisterActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.function.Function;
 
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
