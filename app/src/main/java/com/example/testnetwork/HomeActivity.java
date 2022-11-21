@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -50,7 +51,40 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = null;
                 intent = new Intent(HomeActivity.this, AddGroupActivity.class);
+                intent.putExtra("key","create");
                 startActivity(intent);
+            }
+        });
+        // ALL
+        Button Button_All=findViewById(R.id.tag_ALL);
+        Button_All.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("Click All");
+            }
+        });
+        // COURSEWORK
+        Button Button_Coursework=findViewById(R.id.tag_Coursework);
+        Button_Coursework.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("Click Coursework");
+            }
+        });
+        // CARPOOL
+        Button Button_Carpool=findViewById(R.id.tag_Carpool);
+        Button_Carpool.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("Click Carpool");
+            }
+        });
+        // Activity
+        Button Button_Activity=findViewById(R.id.tag_Activity);
+        Button_Activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("Click Activity");
             }
         });
     }
