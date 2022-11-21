@@ -95,7 +95,21 @@ public class AddGroupActivity extends AppCompatActivity {
 
     private void creategroup(JSONObject forminfo){
         // TODO: 添加小组
+        try {
+            // 构造请求参数
+            // gtag, gtitle, gdescription, gnumber
+            RequestBody requestBody=new FormBody.Builder()
+                    .add("gtag",forminfo.getString("tag"))
+                    .add("gtitle",forminfo.getString("title"))
+                    .add("gdescription",forminfo.getString("desc"))
+                    .add("gnumber",forminfo.getString("max"))
+                    .build();
+            // 发起请求，同时定义并传入onResponse回调
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/user/register",this::onResponse,AddGroupActivity.this);
 
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     private void joingroup(String groupid,JSONObject forminfo){
