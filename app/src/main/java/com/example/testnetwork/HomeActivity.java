@@ -87,6 +87,24 @@ public class HomeActivity extends AppCompatActivity {
                 System.out.println("Click Activity");
             }
         });
+        // MY GROUP
+        Button Button_Mygroup=findViewById(R.id.myGroupBtn_slide);
+        Button_Mygroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("Click MY GROUP");
+            }
+        });
+        // Exit
+        Button Button_Exit=findViewById(R.id.exitBtn_slide);
+        Button_Exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UidStorage.delUid(HomeActivity.this);
+                Intent intent=new Intent(HomeActivity.this,RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

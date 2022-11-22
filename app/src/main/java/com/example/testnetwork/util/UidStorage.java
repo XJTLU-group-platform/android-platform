@@ -10,6 +10,7 @@ public class UidStorage {
     private static final String PREF_NAME="user_info";
 
     public static boolean hasUid(Context ctx){
+        System.out.println("UID: "+String.valueOf(getUid(ctx).length()==0));
         if (getUid(ctx).length()==0){
             return false;
         }else{
@@ -43,7 +44,7 @@ public class UidStorage {
         SharedPreferences sp = ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         //获得Editor 实例
         SharedPreferences.Editor editor = sp.edit();
-        editor.clear();
+        editor.remove("uid");
         editor.commit();
     }
 }
