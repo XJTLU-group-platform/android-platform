@@ -31,6 +31,7 @@ public class AddGroupActivity extends AppCompatActivity {
     private EditText TitleDOM;
     private EditText MaxmemberDOM;
     private EditText DescDOM;
+    private Button ResetDOM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class AddGroupActivity extends AppCompatActivity {
         TitleDOM=findViewById(R.id.group_info_title);
         MaxmemberDOM=findViewById(R.id.group_info_max_num);
         DescDOM=findViewById(R.id.group_info_description);
+        ResetDOM = findViewById(R.id.buttonReset_add_group);
 
         // 获取传入的intent参数
         Intent intent=getIntent();
@@ -57,6 +59,7 @@ public class AddGroupActivity extends AppCompatActivity {
         // 绑定提交按钮
         Button submitButton=findViewById(R.id.buttonAddGroup);
         submitButton.setOnClickListener(this::decidesubmit);
+        ResetDOM.setOnClickListener(this::onResetClick);
     }
 
     // 获取这一页的表单信息
@@ -81,6 +84,13 @@ public class AddGroupActivity extends AppCompatActivity {
     //TODO:判断输入的创建小组是否满足要求
 
     //TODO:Reset()
+    private void onResetClick(View v){
+        TagDOM.getBaseline();
+        TitleDOM.setText("");
+        MaxmemberDOM.setText("");
+        DescDOM.setText("");
+    }
+
 
     //TODO:把各项信息传到数据库
     private void decidesubmit(View view){
