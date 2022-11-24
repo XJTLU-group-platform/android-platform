@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.testnetwork.util.SendRequest;
+import com.example.testnetwork.util.UidStorage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,12 +55,24 @@ public class AddGroupActivity extends AppCompatActivity {
         // 获取传入的intent参数
         Intent intent=getIntent();
         key=intent.getStringExtra("key");
-        System.out.println("Intent parameter: "+key);
+        gid=intent.getStringExtra("gid");
+        System.out.println("Intent parameter: "+key+", "+gid);
+        // 控制如何渲染页面
+        controlshow(key,gid);
 
         // 绑定提交按钮
         Button submitButton=findViewById(R.id.buttonAddGroup);
         submitButton.setOnClickListener(this::decidesubmit);
         ResetDOM.setOnClickListener(this::onResetClick);
+    }
+
+    private void controlshow(String key,String gid){
+        if(key.equals("create")){
+            // TODO: 显示 Tag，Title，Max member， Description，（ <-都可编辑），CREATE GROUP/DELETE GROUP按钮，RESET按钮
+        }else{
+            // TODO: 显示 Tag，Title，Max member， Description,( <-都只能看），CV（可编辑），Join GROUP/Quit Group按钮
+
+        }
     }
 
     // 获取这一页的表单信息
@@ -104,7 +117,7 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void creategroup(JSONObject forminfo){
-        // TODO: 添加小组
+        // 添加小组
         try {
             // 构造请求参数
             // gtag, gtitle, gdescription, gnumber
@@ -115,18 +128,26 @@ public class AddGroupActivity extends AppCompatActivity {
                     .add("gnumber",forminfo.getString("max"))
                     .build();
             // 发起请求，同时定义并传入onResponse回调
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/user/register",this::onResponse,AddGroupActivity.this);
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/create",this::onResponse,AddGroupActivity.this);
 
         }catch (JSONException e){
             e.printStackTrace();
         }
     }
 
+    private void deletegroup(String gid){
+
+    }
+
     private void joingroup(String groupid,JSONObject forminfo){
-        // TODO： 加入小组
         if (groupid.length()==0){
             System.out.println("No group id");
         }
+
+    }
+
+    private void quitgroup(String groupid){
+
     }
 
     private String onResponse(JSONObject resultjson){
