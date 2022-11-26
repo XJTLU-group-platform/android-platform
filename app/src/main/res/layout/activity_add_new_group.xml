@@ -11,8 +11,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="50dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="-205dp"
+        tools:layout_editor_absoluteY="66dp"
 
         >
 
@@ -22,6 +22,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/page_head_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -48,6 +49,14 @@
                 android:text="Tag:"
                 android:textSize="15sp" />
 
+            <TextView
+                android:id="@+id/group_info_tag_text"
+                android:layout_width="91dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:text="[Test Type]"
+                android:inputType="textPersonName" />
             <Spinner
                 android:id="@+id/group_info_tag"
                 android:layout_width="91dp"
@@ -130,13 +139,51 @@
                     android:id="@+id/group_info_description"
                     style="@style/EditTextStyle"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="115dp"
                     android:enabled="true"
                     android:gravity="top"
                     android:inputType="textMultiLine"
-                    android:minLines="8"
                     android:maxLines="8"
-                    android:scrollbars="vertical"/>
+                    android:minLines="8"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_info_cvbox"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:text="My details："
+
+                android:textSize="15sp" />
+
+            <LinearLayout
+                style="@style/InputBoxStyle"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/group_info_cv"
+                    style="@style/EditTextStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="115dp"
+                    android:enabled="true"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:maxLines="8"
+                    android:minLines="8"
+                    android:scrollbars="vertical" />
 
             </LinearLayout>
 
@@ -155,9 +202,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:onClick="register"
             android:text="Create Group" />
 
+        <Button
+            android:id="@+id/buttonDelGtroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Group" />
+
+        <Button
+            android:id="@+id/button_join_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Join" />
+        <Button
+            android:id="@+id/button_quit_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quit" />
         <Button
             android:id="@+id/buttonReset_add_group"
             android:layout_width="match_parent"

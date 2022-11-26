@@ -105,6 +105,18 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // Test, 测试跳转到详细页面
+        findViewById(R.id.testPortal).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = null;
+                intent = new Intent(HomeActivity.this, AddGroupActivity.class);
+                intent.putExtra("key","join");
+                intent.putExtra("gid","001");
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override

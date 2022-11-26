@@ -11,8 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.testnetwork.util.SendRequest;
+import com.example.testnetwork.util.ToastUtil;
 import com.example.testnetwork.util.UidStorage;
 
 import org.json.JSONException;
@@ -28,11 +30,19 @@ public class AddGroupActivity extends AppCompatActivity {
     private String gid="";
 
     // 页面元素
+    private TextView PageHeadDOM;
     private Spinner TagDOM;
+    private TextView TagTextDOM;
     private EditText TitleDOM;
     private EditText MaxmemberDOM;
     private EditText DescDOM;
+    private EditText MycvDOM;
     private Button ResetDOM;
+    private Button CreateDOM;
+    private Button DelDOM;
+    private Button JoinDOM;
+    private Button QuitDOM;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +55,19 @@ public class AddGroupActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        // 绑定
+        // 绑定元素
+        PageHeadDOM=findViewById(R.id.page_head_title);
         TagDOM=findViewById(R.id.group_info_tag);
+        TagTextDOM=findViewById(R.id.group_info_tag_text);
         TitleDOM=findViewById(R.id.group_info_title);
         MaxmemberDOM=findViewById(R.id.group_info_max_num);
         DescDOM=findViewById(R.id.group_info_description);
+        MycvDOM=findViewById(R.id.group_info_cv);
         ResetDOM = findViewById(R.id.buttonReset_add_group);
+        CreateDOM=findViewById(R.id.buttonAddGroup);
+        DelDOM=findViewById(R.id.buttonDelGtroup);
+        JoinDOM=findViewById(R.id.button_join_group);
+        QuitDOM=findViewById(R.id.button_quit_group);
 
         // 获取传入的intent参数
         Intent intent=getIntent();
@@ -60,60 +77,100 @@ public class AddGroupActivity extends AppCompatActivity {
         // 控制如何渲染页面
         controlshow(key,gid);
 
-        // 绑定提交按钮
-        Button submitButton=findViewById(R.id.buttonAddGroup);
-        submitButton.setOnClickListener(this::decidesubmit);
+        // 绑定重置按钮
         ResetDOM.setOnClickListener(this::onResetClick);
+        // 绑定创建按钮
+        CreateDOM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                creategroup(getAllInfo());
+            }
+        });
+        // 绑定删除按钮
+        DelDOM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deletegroup(gid);
+            }
+        });
+        // 绑定加入按钮
+        JoinDOM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                joingroup(gid,getAllInfo());
+            }
+        });
+        // 绑定退出按钮
+        QuitDOM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                quitgroup(gid);
+            }
+        });
     }
 
+    private void stopEdit(EditText dom){
+        dom.setEnabled(false);
+        dom.setFocusable(false);
+        dom.setFocusableInTouchMode(false);
+    }
     private void controlshow(String key,String gid){
+        // 在请求信息前根据key渲染一遍
         if(key.equals("create")){
-            // TODO: 显示 Tag，Title，Max member， Description，（ <-都可编辑），CREATE GROUP/DELETE GROUP按钮，RESET按钮
+            ToastUtil.showMsg(AddGroupActivity.this, "Will Create Group");
+            PageHeadDOM.setText("Create A Group");
+            // 显示 Tag，Title，Max member， Description，（ <-都可编辑），CREATE GROUP/DELETE GROUP按钮，RESET按钮
+            // 隐藏不该出现的
+            findViewById(R.id.group_info_cvbox).setVisibility(View.GONE);
+            JoinDOM.setVisibility(View.GONE);
+            QuitDOM.setVisibility(View.GONE);
+            TagTextDOM.setVisibility(View.GONE);
         }else{
-            // TODO: 显示 Tag，Title，Max member， Description,( <-都只能看），CV（可编辑），Join GROUP/Quit Group按钮
-
+            ToastUtil.showMsg(AddGroupActivity.this, "Will View Group");
+            PageHeadDOM.setText("View A Group");
+            // 显示 Tag，Title，Max member， Description,( <-都只能看），CV（可编辑），Join GROUP/Quit Group按钮
+            // 禁止不能点击的，隐藏不该出现的
+            CreateDOM.setVisibility(View.GONE);
+            DelDOM.setVisibility(View.GONE);
+            TagDOM.setVisibility(View.GONE);
+            stopEdit(TitleDOM);
+            stopEdit(MaxmemberDOM);
+            stopEdit(DescDOM);
         }
     }
 
     // 获取这一页的表单信息
+    //TODO:判断输入的创建小组是否满足要求
     private JSONObject getAllInfo(){
         JSONObject jsonObject=new JSONObject();
         String TagString=TagDOM.getSelectedItem().toString();
         String TitleString=TitleDOM.getText().toString().trim();
         String MaxmemberString=MaxmemberDOM.getText().toString().trim();
         String DescString=DescDOM.getText().toString().trim();
+        String MycvString=MycvDOM.getText().toString().trim();
 
         try {
             jsonObject.put("tag",TagString);
             jsonObject.put("title",TitleString);
             jsonObject.put("max",MaxmemberString);
             jsonObject.put("desc",DescString);
+            jsonObject.put("cv",MycvString);
         }catch (JSONException e){
             e.printStackTrace();
         }
 
         return jsonObject;
     }
-    //TODO:判断输入的创建小组是否满足要求
 
-    //TODO:Reset()
+
+    //四个按钮
+
     private void onResetClick(View v){
         TagDOM.getBaseline();
         TitleDOM.setText("");
         MaxmemberDOM.setText("");
         DescDOM.setText("");
-    }
-
-
-    //TODO:把各项信息传到数据库
-    private void decidesubmit(View view){
-        JSONObject forminfo=getAllInfo();
-        System.out.println("CLICK BUTTON: "+forminfo.toString());
-        if(key.equals("create")){
-            this.creategroup(forminfo);
-        }else if(key.equals("join")){
-            this.joingroup(gid,forminfo);
-        }
+        MycvDOM.setText("");
     }
 
     private void creategroup(JSONObject forminfo){
@@ -151,6 +208,7 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private String onResponse(JSONObject resultjson){
+        ToastUtil.showMsg(AddGroupActivity.this, "Success");
         Intent intent = null;
         intent = new Intent(AddGroupActivity.this, HomeActivity.class);
         startActivity(intent);
