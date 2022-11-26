@@ -144,7 +144,7 @@ public class AddGroupActivity extends AppCompatActivity {
                     .add("uid",UidStorage.getUid(AddGroupActivity.this))
                     .build();
             // 发起请求，同时定义并传入onResponse回调
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/create",this::onGotDetails,AddGroupActivity.this);
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/detail",this::onGotDetails,AddGroupActivity.this);
 
         }
     }
@@ -213,7 +213,7 @@ public class AddGroupActivity extends AppCompatActivity {
                     .add("gnumber",forminfo.getString("max"))
                     .build();
             // 发起请求，同时定义并传入onResponse回调
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/create",this::onResponse,AddGroupActivity.this);
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/add",this::onResponse,AddGroupActivity.this);
 
         }catch (JSONException e){
             e.printStackTrace();
@@ -221,6 +221,15 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void deletegroup(String gid){
+        try{
+            RequestBody requestBody=new FormBody.Builder()
+                    .add("gid", gid)
+                    .build();
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -228,10 +237,35 @@ public class AddGroupActivity extends AppCompatActivity {
         if (groupid.length()==0){
             System.out.println("No group id");
         }
+        try {
+            // 构造请求参数
+            String uid= UidStorage.getUid(AddGroupActivity.this);
+            // gtag, gtitle, gdescription, gnumber
+            RequestBody requestBody=new FormBody.Builder()
+                    .add("uid",uid)
+                    .add("gid",groupid)
+                    .add("cv",forminfo.getString("cv"))
+                    .build();
+            // 发起请求，同时定义并传入onResponse回调
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/join",this::onResponse,AddGroupActivity.this);
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
 
     }
 
     private void quitgroup(String groupid){
+        try{
+            RequestBody requestBody=new FormBody.Builder()
+                    .add("uid",UidStorage.getUid(AddGroupActivity.this))
+                    .add("gid", gid)
+                    .build();
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
 
     }
 
