@@ -17,6 +17,7 @@ import com.example.testnetwork.util.SendRequest;
 import com.example.testnetwork.util.ToastUtil;
 import com.example.testnetwork.util.UidStorage;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,7 +127,7 @@ public class AddGroupActivity extends AppCompatActivity {
             QuitDOM.setVisibility(View.GONE);
             TagTextDOM.setVisibility(View.GONE);
         }else{
-            ToastUtil.showMsg(AddGroupActivity.this, "Will View Group");
+            ToastUtil.showMsg(AddGroupActivity.this, "Will View Group gid:"+gid);
             PageHeadDOM.setText("View A Group");
             // 显示 Tag，Title，Max member， Description,( <-都只能看），CV（可编辑），Join GROUP/Quit Group按钮
             // 禁止不能点击的，隐藏不该出现的
@@ -136,11 +137,38 @@ public class AddGroupActivity extends AppCompatActivity {
             stopEdit(TitleDOM);
             stopEdit(MaxmemberDOM);
             stopEdit(DescDOM);
+            // 网络请求详细信息
+            // 构造请求参数
+            RequestBody requestBody=new FormBody.Builder()
+                    .add("gid",gid)
+                    .add("uid",UidStorage.getUid(AddGroupActivity.this))
+                    .build();
+            // 发起请求，同时定义并传入onResponse回调
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/create",this::onGotDetails,AddGroupActivity.this);
+
         }
     }
 
+    private String onGotDetails(JSONObject jsonObject){
+        try{
+            // 如果成功
+            if(SendRequest.mock){
+                jsonObject=new JSONObject("{\"gtag\":\"Carpool 拼车\",\"gtitle\":\"[Mock]taxi\",\"gdescription\":\"The idea is taking a taxi go XJTLU\",\"gnumber\":\"18\",\"gnownum\":\"3\"}");
+            }
+            TagTextDOM.setText(jsonObject.getString("gtag"));
+            TitleDOM.setText(jsonObject.getString("gtitle"));
+            MaxmemberDOM.setText(jsonObject.getString("gnumber"));
+            DescDOM.setText(jsonObject.getString("gdescription"));
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     // 获取这一页的表单信息
-    //TODO:判断输入的创建小组是否满足要求
+    //判断输入的创建小组是否满足要求
     private JSONObject getAllInfo(){
         JSONObject jsonObject=new JSONObject();
         String TagString=TagDOM.getSelectedItem().toString();
