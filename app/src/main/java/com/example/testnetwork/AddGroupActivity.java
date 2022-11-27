@@ -125,6 +125,7 @@ public class AddGroupActivity extends AppCompatActivity {
             findViewById(R.id.group_info_cvbox).setVisibility(View.GONE);
             JoinDOM.setVisibility(View.GONE);
             QuitDOM.setVisibility(View.GONE);
+            DelDOM.setVisibility(View.GONE);
             TagTextDOM.setVisibility(View.GONE);
         }else{
             ToastUtil.showMsg(AddGroupActivity.this, "Will View Group gid:"+gid);
@@ -132,8 +133,8 @@ public class AddGroupActivity extends AppCompatActivity {
             // 显示 Tag，Title，Max member， Description,( <-都只能看），CV（可编辑），Join GROUP/Quit Group按钮
             // 禁止不能点击的，隐藏不该出现的
             CreateDOM.setVisibility(View.GONE);
-            DelDOM.setVisibility(View.GONE);
             TagDOM.setVisibility(View.GONE);
+            ResetDOM.setVisibility(View.GONE);
             stopEdit(TitleDOM);
             stopEdit(MaxmemberDOM);
             stopEdit(DescDOM);
@@ -221,15 +222,8 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void deletegroup(String gid){
-        try{
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("gid", gid)
-                    .build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
-
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+        RequestBody requestBody=new FormBody.Builder().add("gid", gid).build();
+        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
 
     }
 
@@ -255,24 +249,18 @@ public class AddGroupActivity extends AppCompatActivity {
 
     }
 
-    private void quitgroup(String groupid){
-        try{
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("uid",UidStorage.getUid(AddGroupActivity.this))
-                    .add("gid", gid)
-                    .build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
-
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+    private void quitgroup(String gid){
+        RequestBody requestBody=new FormBody.Builder()
+                .add("uid",UidStorage.getUid(AddGroupActivity.this))
+                .add("gid", gid)
+                .build();
+        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
 
     }
 
     private String onResponse(JSONObject resultjson){
         ToastUtil.showMsg(AddGroupActivity.this, "Success");
-        Intent intent = null;
-        intent = new Intent(AddGroupActivity.this, HomeActivity.class);
+        Intent intent = new Intent(AddGroupActivity.this, HomeActivity.class);
         startActivity(intent);
 
         return null;
