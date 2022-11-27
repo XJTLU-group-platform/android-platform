@@ -109,6 +109,7 @@
                 android:id="@+id/group_info_max_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:layout_weight="1"
                 android:ems="10" />
         </LinearLayout>
