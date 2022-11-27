@@ -2,6 +2,7 @@ package com.example.testnetwork;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
@@ -31,6 +36,14 @@ public class HomeActivity extends AppCompatActivity {
     private SlideMenu slideMenu;
     private FloatingActionButton addGroupBtn;
     private LinearLayout SL_GroupCards;
+
+    private Button Tag_All;
+    private Button Tag_Coursework;
+    private Button Tag_Carpool;
+    private Button Tag_Activity;
+    private Button Tag_My;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +57,17 @@ public class HomeActivity extends AppCompatActivity {
         addGroupBtn = findViewById(R.id.addBtn);
         SL_GroupCards = findViewById(R.id.card_sl_layout);
 
+        Tag_All=findViewById(R.id.tag_ALL);
+        Tag_Coursework=findViewById(R.id.tag_Coursework);
+        Tag_Carpool=findViewById(R.id.tag_Carpool);
+        Tag_Activity=findViewById(R.id.tag_Activity);
+        Tag_My=findViewById(R.id.myGroupBtn_slide);
 
         mIbHead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 slideMenu.switchMenu();
+
             }
         });
 
@@ -61,46 +80,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        // ALL
-        Button Button_All=findViewById(R.id.tag_ALL);
-        Button_All.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Click All");
-            }
-        });
-        // COURSEWORK
-        Button Button_Coursework=findViewById(R.id.tag_Coursework);
-        Button_Coursework.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Click Coursework");
-            }
-        });
-        // CARPOOL
-        Button Button_Carpool=findViewById(R.id.tag_Carpool);
-        Button_Carpool.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Click Carpool");
-            }
-        });
-        // Activity
-        Button Button_Activity=findViewById(R.id.tag_Activity);
-        Button_Activity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Click Activity");
-            }
-        });
-        // MY GROUP
-        Button Button_Mygroup=findViewById(R.id.myGroupBtn_slide);
-        Button_Mygroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Click MY GROUP");
-            }
-        });
+
         // Exit
         Button Button_Exit=findViewById(R.id.exitBtn_slide);
         Button_Exit.setOnClickListener(new View.OnClickListener() {
@@ -111,27 +91,47 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        // Test, 测试跳转到详细页面
-        findViewById(R.id.testPortal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = null;
-                intent = new Intent(HomeActivity.this, AddGroupActivity.class);
-                intent.putExtra("key","join");
-                intent.putExtra("gid","001");
-                startActivity(intent);
-            }
-        });
-
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        // 构造请求参数
+        requestForGroups();
+    }
+
+    // 标签栏点击和侧滑栏my group点击
+    public void tagsclick(View view){
+        requestForGroups(view);
+    }
+
+    // 发起网络请求请求小组列表
+    private void requestForGroups(){
         RequestBody requestBody=new FormBody.Builder().build();
-        // 请求首页内容
         SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+    }
+    private void requestForGroups(View view){
+        // 构造请求参数
+        RequestBody requestBody;
+        int viewid=view.getId();
+        List<String> tagTypesList= Arrays.asList(getResources().getStringArray(R.array.tags));
+        if(viewid==Tag_All.getId()) {
+            requestBody=new FormBody.Builder().build();
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+        }else if(viewid==Tag_Coursework.getId()) {
+            requestBody=new FormBody.Builder().add("gtag",tagTypesList.get(0)).build();
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+        }else if(viewid==Tag_Carpool.getId()) {
+            requestBody=new FormBody.Builder().add("gtag",tagTypesList.get(1)).build();
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+        }else if(viewid==Tag_Activity.getId()) {
+            requestBody=new FormBody.Builder().add("gtag",tagTypesList.get(2)).build();
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+        }else if(viewid==Tag_My.getId()) {
+            requestBody=new FormBody.Builder().add("uid",UidStorage.getUid(HomeActivity.this)).build();
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+        }
     }
 
     private String onHomeResponse(JSONObject jsonObject){
@@ -143,34 +143,59 @@ public class HomeActivity extends AppCompatActivity {
             }else{
                 groupinfo=(JSONArray)jsonObject.get("data");
             }
-
-            // Get the needed information in groupinfo, give the values to cardView components, add the cardView to its parent LinearLayout
-            // TODO: 把groupinfo这个LIST渲染到页面里
-            for(int i = 0; i < groupinfo.length(); i++){
-                System.out.println("Add Group " + i + "/ " + groupinfo.length());
-                JSONObject groupObj = groupinfo.getJSONObject(i);
-                // Get from card_group.xml
-                View view =  LayoutInflater.from(this).inflate(R.layout.card_group, null);
-                TextView card_group_title= view.findViewById(R.id.card_group_title);
-                TextView card_currentNum = view.findViewById(R.id.card_currentNum);
-                TextView card_maxNum = view.findViewById(R.id.card_maxNum);
-
-                card_group_title.setText(groupObj.get("gtitle").toString());
-                card_currentNum.setText(String.valueOf((int) groupObj.get("gnownum")));
-                card_maxNum.setText(String.valueOf((int) groupObj.get("gnumber")));
-                SL_GroupCards.addView(view);
+            try {
+                displayGroups(groupinfo);
+            }catch (JSONException e){
+                e.printStackTrace();
             }
-
-
-            System.out.println(groupinfo.toString());
+//            System.out.println(groupinfo.toString());
         }catch (JSONException e){
             e.printStackTrace();
         }
-
         return null;
     }
 
-    private void showGroups(){
+    private void displayGroups(JSONArray groupinfo) throws JSONException {
+        Context that=this;
+        HomeActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                SL_GroupCards.removeAllViews();
+                for(int i = 0; i < groupinfo.length(); i++){
+                    try {
+                        // Get the needed information in groupinfo, give the values to cardView components, add the cardView to its parent LinearLayout
+//                        System.out.println("Add Group " + i + "/ " + groupinfo.length());
+                        JSONObject groupObj = groupinfo.getJSONObject(i);
+                        // TODO: 加边距
+                        // Get from card_group.xml
+                        View view =  LayoutInflater.from(that).inflate(R.layout.card_group, null);
+                        TextView card_group_title= view.findViewById(R.id.card_group_title);
+                        TextView card_currentNum = view.findViewById(R.id.card_currentNum);
+                        TextView card_maxNum = view.findViewById(R.id.card_maxNum);
+                        card_group_title.setText(groupObj.getString("gtitle"));
+                        card_currentNum.setText(groupObj.getString("gnownum"));
+                        card_maxNum.setText(groupObj.getString("gnumber"));
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                try {
+                                    Intent intent = null;
+                                    intent = new Intent(HomeActivity.this, AddGroupActivity.class);
+                                    intent.putExtra("key","join");
+                                    intent.putExtra("gid",groupObj.getString("gid"));
+                                    startActivity(intent);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        SL_GroupCards.addView(view);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
     }
 }

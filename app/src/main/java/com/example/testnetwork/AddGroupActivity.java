@@ -164,12 +164,15 @@ public class AddGroupActivity extends AppCompatActivity {
                 case "owner":
                     JoinDOM.setVisibility(View.GONE);
                     QuitDOM.setVisibility(View.GONE);
+                    break;
                 case "member":
                     DelDOM.setVisibility(View.GONE);
                     JoinDOM.setVisibility(View.GONE);
+                    break;
                 case "visitor":
                     DelDOM.setVisibility(View.GONE);
                     QuitDOM.setVisibility(View.GONE);
+                    break;
 
             }
 
@@ -272,9 +275,9 @@ public class AddGroupActivity extends AppCompatActivity {
 
     private String onResponse(JSONObject resultjson){
         ToastUtil.showMsg(AddGroupActivity.this, "Success");
-        Intent intent = new Intent(AddGroupActivity.this, HomeActivity.class);
-        startActivity(intent);
-
+//        Intent intent = new Intent(AddGroupActivity.this, HomeActivity.class);
+//        startActivity(intent);
+        finish();
         return null;
     }
 }

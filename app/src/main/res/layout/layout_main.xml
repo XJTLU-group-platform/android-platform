@@ -72,6 +72,7 @@
 
                     <Button
                         android:id="@+id/tag_ALL"
+                        android:onClick="tagsclick"
                         android:layout_width="69dp"
                         android:layout_height="48dp"
                         android:layout_marginLeft="10dp"
@@ -80,6 +81,7 @@
 
                     <Button
                         android:id="@+id/tag_Coursework"
+                        android:onClick="tagsclick"
                         android:layout_width="138dp"
                         android:layout_height="48dp"
                         android:layout_marginLeft="10dp"
@@ -88,6 +90,7 @@
 
                     <Button
                         android:id="@+id/tag_Carpool"
+                        android:onClick="tagsclick"
                         android:layout_width="138dp"
                         android:layout_height="48dp"
                         android:layout_marginLeft="10dp"
@@ -96,6 +99,7 @@
 
                     <Button
                         android:id="@+id/tag_Activity"
+                        android:onClick="tagsclick"
                         android:layout_width="138dp"
                         android:layout_height="48dp"
                         android:layout_marginLeft="10dp"
@@ -135,6 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
+                        android:visibility="gone"
                         app:cardBackgroundColor="@color/CardWhite"
                         app:cardCornerRadius="8dp"
                         app:cardElevation="10dp"
