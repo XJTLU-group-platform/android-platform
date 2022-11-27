@@ -144,6 +144,7 @@ public class HomeActivity extends AppCompatActivity {
                 groupinfo=(JSONArray)jsonObject.get("data");
             }
 
+            // Get the needed information in groupinfo, give the values to cardView components, add the cardView to its parent LinearLayout
             // TODO: 把groupinfo这个LIST渲染到页面里
             for(int i = 0; i < groupinfo.length(); i++){
                 System.out.println("Add Group " + i + "/ " + groupinfo.length());
@@ -159,6 +160,7 @@ public class HomeActivity extends AppCompatActivity {
                 card_maxNum.setText(String.valueOf((int) groupObj.get("gnumber")));
                 SL_GroupCards.addView(view);
             }
+
 
             System.out.println(groupinfo.toString());
         }catch (JSONException e){
