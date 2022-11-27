@@ -4,10 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.testnetwork.util.SendRequest;
 import com.example.testnetwork.util.ToastUtil;
@@ -26,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView mIbHead;
     private SlideMenu slideMenu;
     private FloatingActionButton addGroupBtn;
+    private LinearLayout SL_GroupCards;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         mIbHead = findViewById(R.id.userImage);
         slideMenu = findViewById(R.id.slideMenu);
         addGroupBtn = findViewById(R.id.addBtn);
+        SL_GroupCards = findViewById(R.id.card_sl_layout);
 
 
         mIbHead.setOnClickListener(new View.OnClickListener() {
@@ -137,12 +143,32 @@ public class HomeActivity extends AppCompatActivity {
             }else{
                 groupinfo=(JSONArray)jsonObject.get("data");
             }
+
             // TODO: 把groupinfo这个LIST渲染到页面里
+            for(int i = 0; i < groupinfo.length(); i++){
+                System.out.println("Add Group " + i + "/ " + groupinfo.length());
+                JSONObject groupObj = groupinfo.getJSONObject(i);
+                // Get from card_group.xml
+                View view =  LayoutInflater.from(this).inflate(R.layout.card_group, null);
+                TextView card_group_title= view.findViewById(R.id.card_group_title);
+                TextView card_currentNum = view.findViewById(R.id.card_currentNum);
+                TextView card_maxNum = view.findViewById(R.id.card_maxNum);
+
+                card_group_title.setText(groupObj.get("gtitle").toString());
+                card_currentNum.setText(String.valueOf((int) groupObj.get("gnownum")));
+                card_maxNum.setText(String.valueOf((int) groupObj.get("gnumber")));
+                SL_GroupCards.addView(view);
+            }
+
             System.out.println(groupinfo.toString());
         }catch (JSONException e){
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    private void showGroups(){
+
     }
 }

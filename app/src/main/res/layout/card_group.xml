@@ -3,9 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_group"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="10dp"
     app:cardBackgroundColor="@color/CardWhite"
     app:cardCornerRadius="8dp"
     app:cardElevation="10dp"
@@ -36,21 +39,21 @@
                 android:background="@drawable/user_image"
                 android:src="@drawable/circle_images_white"/>
 
-            <TextView
-                android:id="@+id/card_userName"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:text="UserName"
-                android:textColor="#1D1C1E"/>
+<!--            <TextView-->
+<!--                android:id="@+id/card_userName"-->
+<!--                android:layout_width="70dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:layout_marginLeft="5dp"-->
+<!--                android:text="UserName"-->
+<!--                android:textColor="#1D1C1E"/>-->
 
             <TextView
                 android:id="@+id/card_currentNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="70dp"
+                android:layout_marginLeft="140dp"
                 android:text="1"
                 android:textColor="@color/blue_grey"
                 android:textSize="16sp"/>
@@ -72,13 +75,13 @@
                 android:textColor="@color/blue_grey"
                 android:textSize="16sp"/>
 
-            <ImageView
+            <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="right"
                 android:layout_marginLeft="120dp"
                 android:layout_weight="0"
-                android:src="@drawable/icon_enter" />
+                android:background="@drawable/icon_enter" />
 
         </LinearLayout>
     </LinearLayout>

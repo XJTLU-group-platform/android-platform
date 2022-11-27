@@ -221,6 +221,10 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void deletegroup(String gid){
+//        RequestBody requestBody=new FormBody.Builder()
+//                .add("gid", gid)
+//                .build();
+//        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
         try{
             RequestBody requestBody=new FormBody.Builder()
                     .add("gid", gid)
@@ -256,6 +260,11 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void quitgroup(String groupid){
+//        RequestBody requestBody=new FormBody.Builder()
+//                .add("uid",UidStorage.getUid(AddGroupActivity.this))
+//                .add("gid", gid)
+//                .build();
+//        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
         try{
             RequestBody requestBody=new FormBody.Builder()
                     .add("uid",UidStorage.getUid(AddGroupActivity.this))
