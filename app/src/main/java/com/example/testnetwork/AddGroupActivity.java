@@ -111,7 +111,7 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void stopEdit(EditText dom){
-        dom.setEnabled(false);
+//        dom.setEnabled(false);
         dom.setFocusable(false);
         dom.setFocusableInTouchMode(false);
     }
@@ -120,20 +120,21 @@ public class AddGroupActivity extends AppCompatActivity {
         if(key.equals("create")){
             ToastUtil.showMsg(AddGroupActivity.this, "Will Create Group");
             PageHeadDOM.setText("Create A Group");
-            // 显示 Tag，Title，Max member， Description，（ <-都可编辑），CREATE GROUP/DELETE GROUP按钮，RESET按钮
+            // 显示 Tag，Title，Max member， Description，（ <-都可编辑），CREATE GROUP按钮，RESET按钮
             // 隐藏不该出现的
             findViewById(R.id.group_info_cvbox).setVisibility(View.GONE);
             JoinDOM.setVisibility(View.GONE);
             QuitDOM.setVisibility(View.GONE);
+            DelDOM.setVisibility(View.GONE);
             TagTextDOM.setVisibility(View.GONE);
         }else{
             ToastUtil.showMsg(AddGroupActivity.this, "Will View Group gid:"+gid);
             PageHeadDOM.setText("View A Group");
-            // 显示 Tag，Title，Max member， Description,( <-都只能看），CV（可编辑），Join GROUP/Quit Group按钮
+            // 显示 Tag，Title，Max member， Description,( <-都只能看），CV（可编辑），Join GROUP/Quit Group/DELETE GROUP按钮
             // 禁止不能点击的，隐藏不该出现的
             CreateDOM.setVisibility(View.GONE);
-            DelDOM.setVisibility(View.GONE);
             TagDOM.setVisibility(View.GONE);
+            ResetDOM.setVisibility(View.GONE);
             stopEdit(TitleDOM);
             stopEdit(MaxmemberDOM);
             stopEdit(DescDOM);
@@ -153,12 +154,24 @@ public class AddGroupActivity extends AppCompatActivity {
         try{
             // 如果成功
             if(SendRequest.mock){
-                jsonObject=new JSONObject("{\"gtag\":\"Carpool 拼车\",\"gtitle\":\"[Mock]taxi\",\"gdescription\":\"The idea is taking a taxi go XJTLU\",\"gnumber\":\"18\",\"gnownum\":\"3\"}");
+                jsonObject=new JSONObject("{\"gtag\":\"Carpool 拼车\",\"gtitle\":\"[Mock]taxi\",\"gdescription\":\"The idea is taking a taxi go XJTLU\",\"gnumber\":\"18\",\"gnownum\":\"3\",\"role\":\"visitor\"}");
             }
             TagTextDOM.setText(jsonObject.getString("gtag"));
             TitleDOM.setText(jsonObject.getString("gtitle"));
             MaxmemberDOM.setText(jsonObject.getString("gnumber"));
             DescDOM.setText(jsonObject.getString("gdescription"));
+            switch (jsonObject.getString("role")){
+                case "owner":
+                    JoinDOM.setVisibility(View.GONE);
+                    QuitDOM.setVisibility(View.GONE);
+                case "member":
+                    DelDOM.setVisibility(View.GONE);
+                    JoinDOM.setVisibility(View.GONE);
+                case "visitor":
+                    DelDOM.setVisibility(View.GONE);
+                    QuitDOM.setVisibility(View.GONE);
+
+            }
 
         }catch (JSONException e){
             e.printStackTrace();
@@ -221,19 +234,8 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void deletegroup(String gid){
-//        RequestBody requestBody=new FormBody.Builder()
-//                .add("gid", gid)
-//                .build();
-//        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
-        try{
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("gid", gid)
-                    .build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
-
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+        RequestBody requestBody=new FormBody.Builder().add("gid", gid).build();
+        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
 
     }
 
@@ -259,29 +261,18 @@ public class AddGroupActivity extends AppCompatActivity {
 
     }
 
-    private void quitgroup(String groupid){
-//        RequestBody requestBody=new FormBody.Builder()
-//                .add("uid",UidStorage.getUid(AddGroupActivity.this))
-//                .add("gid", gid)
-//                .build();
-//        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
-        try{
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("uid",UidStorage.getUid(AddGroupActivity.this))
-                    .add("gid", gid)
-                    .build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
-
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+    private void quitgroup(String gid){
+        RequestBody requestBody=new FormBody.Builder()
+                .add("uid",UidStorage.getUid(AddGroupActivity.this))
+                .add("gid", gid)
+                .build();
+        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
 
     }
 
     private String onResponse(JSONObject resultjson){
         ToastUtil.showMsg(AddGroupActivity.this, "Success");
-        Intent intent = null;
-        intent = new Intent(AddGroupActivity.this, HomeActivity.class);
+        Intent intent = new Intent(AddGroupActivity.this, HomeActivity.class);
         startActivity(intent);
 
         return null;
