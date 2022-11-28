@@ -122,7 +122,6 @@ public class AddGroupActivity extends AppCompatActivity {
             PageHeadDOM.setText("Create A Group");
             // 显示 Tag，Title，Max member， Description，（ <-都可编辑），CREATE GROUP按钮，RESET按钮
             // 隐藏不该出现的
-            findViewById(R.id.group_info_cvbox).setVisibility(View.GONE);
             JoinDOM.setVisibility(View.GONE);
             QuitDOM.setVisibility(View.GONE);
             DelDOM.setVisibility(View.GONE);
@@ -164,10 +163,12 @@ public class AddGroupActivity extends AppCompatActivity {
                 case "owner":
                     JoinDOM.setVisibility(View.GONE);
                     QuitDOM.setVisibility(View.GONE);
+                    stopEdit(findViewById(R.id.group_info_cvbox));
                     break;
                 case "member":
                     DelDOM.setVisibility(View.GONE);
                     JoinDOM.setVisibility(View.GONE);
+                    stopEdit(findViewById(R.id.group_info_cvbox));
                     break;
                 case "visitor":
                     DelDOM.setVisibility(View.GONE);
@@ -227,6 +228,8 @@ public class AddGroupActivity extends AppCompatActivity {
                     .add("gtitle",forminfo.getString("title"))
                     .add("gdescription",forminfo.getString("desc"))
                     .add("gnumber",forminfo.getString("max"))
+                    .add("cv",forminfo.getString("cv"))
+                    .add("uid",UidStorage.getUid(AddGroupActivity.this))
                     .build();
             // 发起请求，同时定义并传入onResponse回调
             SendRequest.sendRequestsWithOkHttp(requestBody,"/group/add",this::onResponse,AddGroupActivity.this);

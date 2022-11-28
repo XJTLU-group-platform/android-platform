@@ -130,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
             SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
         }else if(viewid==Tag_My.getId()) {
             requestBody=new FormBody.Builder().add("uid",UidStorage.getUid(HomeActivity.this)).build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/joined",this::onHomeResponse,HomeActivity.this);
         }
     }
 
