@@ -17,9 +17,9 @@ import okhttp3.Response;
 public class SendRequest {
 
     // 模拟模式，该参数true时会强制执行成功响应后的分支
-    public static final boolean mock=true;
+    public static final boolean mock=false;
 
-    private static final String rooturl="http://10.0.2.2:8080";
+    private static final String rooturl="http://172.24.34.130:8088";
 
     public static void sendRequestsWithOkHttp(RequestBody requestBody, String targetUrl, Function<JSONObject, String> recall, Context ctx){
         new Thread(new Runnable() {
@@ -62,17 +62,18 @@ public class SendRequest {
         }).start();
     }
 
+
     private static void handleResponse(Context ctx,Function<JSONObject, String> recall,JSONObject jsonObject){
         // 如果是模拟模式（SendRequest.mock为true，会强制执行成功后的分支
         System.out.println("Response: "+jsonObject.toString());
         // 网络请求异常处理部分
         try {
             Looper.prepare();
-            if (jsonObject.has("status")) {
-                String statuscode=jsonObject.getString("status");
+            if (jsonObject.has("code")) {
+                String statuscode=jsonObject.getString("code");
                 if (statuscode.equals("200")) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        recall.apply(jsonObject);
+                        recall.apply((JSONObject) jsonObject.getJSONObject("data"));
                     }
                 } else if (statuscode.equals("300")) {
                     // 如果已知原因失败

@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class AddGroupActivity extends AppCompatActivity {
@@ -139,12 +140,16 @@ public class AddGroupActivity extends AppCompatActivity {
             stopEdit(DescDOM);
             // 网络请求详细信息
             // 构造请求参数
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("gid",gid)
-                    .add("uid",UidStorage.getUid(AddGroupActivity.this))
-                    .build();
-            // 发起请求，同时定义并传入onResponse回调
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/detail",this::onGotDetails,AddGroupActivity.this);
+            JSONObject json=new JSONObject();
+            try {
+                json.put("gid",gid);
+                json.put("uid",UidStorage.getUid(AddGroupActivity.this));
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+                // 发起请求，同时定义并传入onResponse回调
+                SendRequest.sendRequestsWithOkHttp(requestBody,"/group/detail",this::onGotDetails,AddGroupActivity.this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }
     }
@@ -223,14 +228,15 @@ public class AddGroupActivity extends AppCompatActivity {
         try {
             // 构造请求参数
             // gtag, gtitle, gdescription, gnumber
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("gtag",forminfo.getString("tag"))
-                    .add("gtitle",forminfo.getString("title"))
-                    .add("gdescription",forminfo.getString("desc"))
-                    .add("gnumber",forminfo.getString("max"))
-                    .add("cv",forminfo.getString("cv"))
-                    .add("uid",UidStorage.getUid(AddGroupActivity.this))
-                    .build();
+            JSONObject json=new JSONObject();
+            json.put("uid",UidStorage.getUid(AddGroupActivity.this));
+            json.put("gtag",forminfo.getString("tag"));
+            json.put("gtitle",forminfo.getString("title"));
+            json.put("gdescription",forminfo.getString("desc"));
+            json.put("gnumber",forminfo.getString("max"));
+            json.put("cv",forminfo.getString("cv"));
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+
             // 发起请求，同时定义并传入onResponse回调
             SendRequest.sendRequestsWithOkHttp(requestBody,"/group/add",this::onResponse,AddGroupActivity.this);
 
@@ -240,9 +246,14 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void deletegroup(String gid){
-        RequestBody requestBody=new FormBody.Builder().add("gid", gid).build();
-        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
-
+        JSONObject json=new JSONObject();
+        try {
+            json.put("gid",gid);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/del",this::onResponse,AddGroupActivity.this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void joingroup(String groupid,JSONObject forminfo){
@@ -250,14 +261,11 @@ public class AddGroupActivity extends AppCompatActivity {
             System.out.println("No group id");
         }
         try {
-            // 构造请求参数
-            String uid= UidStorage.getUid(AddGroupActivity.this);
-            // gtag, gtitle, gdescription, gnumber
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("uid",uid)
-                    .add("gid",groupid)
-                    .add("cv",forminfo.getString("cv"))
-                    .build();
+            JSONObject json=new JSONObject();
+            json.put("uid",UidStorage.getUid(AddGroupActivity.this));
+            json.put("gid",groupid);
+            json.put("cv",forminfo.getString("cv"));
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
             // 发起请求，同时定义并传入onResponse回调
             SendRequest.sendRequestsWithOkHttp(requestBody,"/group/join",this::onResponse,AddGroupActivity.this);
 
@@ -268,12 +276,15 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     private void quitgroup(String gid){
-        RequestBody requestBody=new FormBody.Builder()
-                .add("uid",UidStorage.getUid(AddGroupActivity.this))
-                .add("gid", gid)
-                .build();
-        SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
-
+        JSONObject json=new JSONObject();
+        try {
+            json.put("uid",UidStorage.getUid(AddGroupActivity.this));
+            json.put("gid", gid);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/quit",this::onResponse,AddGroupActivity.this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private String onResponse(JSONObject resultjson){

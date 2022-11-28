@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.eclipsesource.json.Json;
 import com.example.testnetwork.util.SendRequest;
 import com.example.testnetwork.util.ToastUtil;
 import com.example.testnetwork.util.UidStorage;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -83,15 +85,20 @@ public class RegisterActivity extends AppCompatActivity {
         }else{
             // 所有已知的规则错误由服务端返回status=300和message提示，前端显示提示框提示用户
             // 构造请求参数
-            RequestBody requestBody=new FormBody.Builder()
-                    .add("uname",uName)
-                    .add("uaccount",uAccount)
-                    .add("upassword",uPassword)
-                    .add("ugender",uGender)
-                    .add("uage",String.valueOf(uAge))
-                    .build();
-            // 发起请求，同时定义并传入onResponse回调
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/user/register",this::onResponse,RegisterActivity.this);
+            try {
+                JSONObject json=new JSONObject();
+                json.put("uname",uName);
+                json.put("uaccount",uAccount);
+                json.put("upassword",uPassword);
+                json.put("ugender",uGender);
+                json.put("uage",String.valueOf(uAge));
+                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+                // 发起请求，同时定义并传入onResponse回调
+                SendRequest.sendRequestsWithOkHttp(requestBody,"/user/register",this::onResponse,RegisterActivity.this);
+
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
 
 
         }

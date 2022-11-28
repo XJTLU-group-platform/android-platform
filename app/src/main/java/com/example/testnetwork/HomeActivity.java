@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 
@@ -51,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // 显示uid
         ToastUtil.showMsg(HomeActivity.this, "Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
-
+        System.out.println("Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
         mIbHead = findViewById(R.id.userImage);
         slideMenu = findViewById(R.id.slideMenu);
         addGroupBtn = findViewById(R.id.addBtn);
@@ -108,29 +109,51 @@ public class HomeActivity extends AppCompatActivity {
 
     // 发起网络请求请求小组列表
     private void requestForGroups(){
-        RequestBody requestBody=new FormBody.Builder().build();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "");
         SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
     }
     private void requestForGroups(View view){
         // 构造请求参数
         RequestBody requestBody;
+        JSONObject json=new JSONObject();;
         int viewid=view.getId();
         List<String> tagTypesList= Arrays.asList(getResources().getStringArray(R.array.tags));
         if(viewid==Tag_All.getId()) {
-            requestBody=new FormBody.Builder().build();
+            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
             SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
         }else if(viewid==Tag_Coursework.getId()) {
-            requestBody=new FormBody.Builder().add("gtag",tagTypesList.get(0)).build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+            try {
+                json.put("gtag",tagTypesList.get(0));
+                requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+                SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }else if(viewid==Tag_Carpool.getId()) {
-            requestBody=new FormBody.Builder().add("gtag",tagTypesList.get(1)).build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+            try {
+                json.put("gtag",tagTypesList.get(1));
+                requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+                SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }else if(viewid==Tag_Activity.getId()) {
-            requestBody=new FormBody.Builder().add("gtag",tagTypesList.get(2)).build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+            try {
+                json.put("gtag",tagTypesList.get(2));
+                requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+                SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }else if(viewid==Tag_My.getId()) {
-            requestBody=new FormBody.Builder().add("uid",UidStorage.getUid(HomeActivity.this)).build();
-            SendRequest.sendRequestsWithOkHttp(requestBody,"/group/joined",this::onHomeResponse,HomeActivity.this);
+            try {
+                json.put("uid",UidStorage.getUid(HomeActivity.this));
+                requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+                SendRequest.sendRequestsWithOkHttp(requestBody,"/group/joined",this::onHomeResponse,HomeActivity.this);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
