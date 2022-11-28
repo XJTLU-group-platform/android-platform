@@ -17,7 +17,7 @@ import okhttp3.Response;
 public class SendRequest {
 
     // 模拟模式，该参数true时会强制执行成功响应后的分支
-    public static final boolean mock=false;
+    public static final boolean mock=true;
 
     private static final String rooturl="http://172.24.34.130:8088";
 
@@ -48,7 +48,7 @@ public class SendRequest {
                         handleResponse(ctx,recall,jsonObject);
                     }else{
                         // mock
-                        JSONObject jsonObject=new JSONObject("{\"status\":\"200\"}");
+                        JSONObject jsonObject=new JSONObject("{\"code\":\"200\"}");
                         // 响应判断
                         handleResponse(ctx,recall,jsonObject);
 
