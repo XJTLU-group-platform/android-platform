@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Looper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,7 +18,7 @@ import okhttp3.Response;
 public class SendRequest {
 
     // 模拟模式，该参数true时会强制执行成功响应后的分支
-    public static final boolean mock=true;
+    public static final boolean mock=false;
 
     private static final String rooturl="http://172.24.34.130:8088";
 
@@ -73,7 +74,27 @@ public class SendRequest {
                 String statuscode=jsonObject.getString("code");
                 if (statuscode.equals("200")) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        recall.apply((JSONObject) jsonObject.getJSONObject("data"));
+                        if(!jsonObject.has("data")){
+                            recall.apply(new JSONObject());
+                        }else{
+                            if(jsonObject.get("data").getClass().toString().equals("class org.json.JSONArray")){
+                                recall.apply(jsonObject);
+                            }else{
+                                JSONObject whichresult=jsonObject.getJSONObject("data");
+                                if(jsonObject.getString("msg").startsWith("owner")||
+                                        jsonObject.getString("msg").startsWith("member")||
+                                        jsonObject.getString("msg").startsWith("visitor")){
+                                    String[] toProcessList=jsonObject.getString("msg").split(";",2);
+
+                                    whichresult.put("role",toProcessList[0]);
+                                    if(toProcessList.length>1){
+                                        whichresult.put("cv",toProcessList[1]);
+                                    }
+
+                                }
+                                recall.apply(whichresult);
+                            }
+                        }
                     }
                 } else if (statuscode.equals("300")) {
                     // 如果已知原因失败
@@ -95,4 +116,5 @@ public class SendRequest {
             System.out.println(e.toString());
         }
     }
+
 }

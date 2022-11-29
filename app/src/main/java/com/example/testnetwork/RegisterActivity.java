@@ -131,12 +131,16 @@ public class RegisterActivity extends AppCompatActivity {
             // 如果成功
             // 把uid保存到本地
             String uid;
+            String uname;
             if(SendRequest.mock){
                 uid="mock0149"; // 模拟
+                uname="UserName";
             }else{
                 uid=jsonObject.getString("uid"); // 实际
+                uname=jsonObject.getString("uname");
             }
             UidStorage.saveUid(uid,RegisterActivity.this);
+            UidStorage.saveUname(uname,RegisterActivity.this);
             ToastUtil.showMsg(RegisterActivity.this, "uid get!"+uid);
             // 跳转页面
             Intent intent = null;

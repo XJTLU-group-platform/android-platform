@@ -47,4 +47,25 @@ public class UidStorage {
         editor.remove("uid");
         editor.commit();
     }
+
+    public static void saveUname(String uname, Context ctx){
+        //获得SharedPreferences的实例 sp_name是文件名
+        SharedPreferences sp = ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        //获得Editor 实例
+        SharedPreferences.Editor editor = sp.edit();
+        //以key-value形式保存数据
+        editor.putString("uname", uname);
+        //apply()是异步写入数据
+        //editor.apply();
+        //commit()是同步写入数据
+        editor.commit();
+    }
+
+    public static String getUname(Context ctx){
+        //获得SharedPreferences的实例
+        SharedPreferences sp = ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        //通过key值获取到相应的data，如果没取到，则返回后面的默认值
+        String data = sp.getString("uname", "UserName");
+        return data;
+    }
 }

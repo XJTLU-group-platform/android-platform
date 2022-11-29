@@ -3,6 +3,7 @@ package com.example.testnetwork;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -154,37 +155,56 @@ public class AddGroupActivity extends AppCompatActivity {
         }
     }
 
-    private String onGotDetails(JSONObject jsonObject){
-        try{
-            // 如果成功
-            if(SendRequest.mock){
-                jsonObject=new JSONObject("{\"gtag\":\"Carpool 拼车\",\"gtitle\":\"[Mock]taxi\",\"gdescription\":\"The idea is taking a taxi go XJTLU\",\"gnumber\":\"18\",\"gnownum\":\"3\",\"role\":\"visitor\"}");
-            }
-            TagTextDOM.setText(jsonObject.getString("gtag"));
-            TitleDOM.setText(jsonObject.getString("gtitle"));
-            MaxmemberDOM.setText(jsonObject.getString("gnumber"));
-            DescDOM.setText(jsonObject.getString("gdescription"));
-            switch (jsonObject.getString("role")){
-                case "owner":
-                    JoinDOM.setVisibility(View.GONE);
-                    QuitDOM.setVisibility(View.GONE);
-                    stopEdit(findViewById(R.id.group_info_cvbox));
-                    break;
-                case "member":
-                    DelDOM.setVisibility(View.GONE);
-                    JoinDOM.setVisibility(View.GONE);
-                    stopEdit(findViewById(R.id.group_info_cvbox));
-                    break;
-                case "visitor":
-                    DelDOM.setVisibility(View.GONE);
-                    QuitDOM.setVisibility(View.GONE);
-                    break;
 
-            }
 
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
+    private String onGotDetails(JSONObject injsonObject){
+
+        final JSONObject cjsonObject=injsonObject;
+        AddGroupActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    JSONObject jsonObject=cjsonObject;
+                    // 如果成功
+                    if(SendRequest.mock){
+                        jsonObject=new JSONObject("{\"gtag\":\"Carpool 拼车\",\"gtitle\":\"[Mock]taxi\",\"gdescription\":\"The idea is taking a taxi go XJTLU\",\"gnumber\":\"18\",\"gnownum\":\"3\",\"role\":\"visitor\"}");
+                    }
+                    TagTextDOM.setText(jsonObject.getString("gtag"));
+                    TitleDOM.setText(jsonObject.getString("gtitle"));
+                    MaxmemberDOM.setText(jsonObject.getString("gnumber"));
+                    DescDOM.setText(jsonObject.getString("gdescription"));
+                    switch (jsonObject.getString("role")){
+                        case "owner":
+                            JoinDOM.setVisibility(View.GONE);
+                            QuitDOM.setVisibility(View.GONE);
+                            MycvDOM.setText(jsonObject.getString("cv"));
+                            stopEdit(MycvDOM);
+                            break;
+                        case "member":
+                            DelDOM.setVisibility(View.GONE);
+                            JoinDOM.setVisibility(View.GONE);
+                            MycvDOM.setText(jsonObject.getString("cv"));
+                            stopEdit(MycvDOM);
+                            break;
+                        case "visitor":
+                            if(Integer.valueOf(jsonObject.getString("gnownum"))==Integer.valueOf(jsonObject.getString("gnumber"))){
+                                JoinDOM.setVisibility(View.GONE);
+                            }
+                            DelDOM.setVisibility(View.GONE);
+                            QuitDOM.setVisibility(View.GONE);
+                            break;
+                        default:
+                            JoinDOM.setVisibility(View.GONE);
+                            DelDOM.setVisibility(View.GONE);
+                            QuitDOM.setVisibility(View.GONE);
+                    }
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
         return null;
     }
@@ -229,7 +249,7 @@ public class AddGroupActivity extends AppCompatActivity {
             // 构造请求参数
             // gtag, gtitle, gdescription, gnumber
             JSONObject json=new JSONObject();
-            json.put("uid",UidStorage.getUid(AddGroupActivity.this));
+            json.put("gleaderid",UidStorage.getUid(AddGroupActivity.this));
             json.put("gtag",forminfo.getString("tag"));
             json.put("gtitle",forminfo.getString("title"));
             json.put("gdescription",forminfo.getString("desc"));

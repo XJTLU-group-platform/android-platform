@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import okhttp3.RequestBody;
 
 public class HomeActivity extends AppCompatActivity {
     private ImageView mIbHead;
+    private TextView SlideUserName;
     private SlideMenu slideMenu;
     private FloatingActionButton addGroupBtn;
     private LinearLayout SL_GroupCards;
@@ -54,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         ToastUtil.showMsg(HomeActivity.this, "Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
         System.out.println("Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
         mIbHead = findViewById(R.id.userImage);
+        SlideUserName=findViewById(R.id.userName_slide);
         slideMenu = findViewById(R.id.slideMenu);
         addGroupBtn = findViewById(R.id.addBtn);
         SL_GroupCards = findViewById(R.id.card_sl_layout);
@@ -99,6 +102,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        SlideUserName.setText(UidStorage.getUname(HomeActivity.this));
         requestForGroups();
     }
 
@@ -109,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // 发起网络请求请求小组列表
     private void requestForGroups(){
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
         SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
     }
     private void requestForGroups(View view){
@@ -163,14 +167,14 @@ public class HomeActivity extends AppCompatActivity {
             JSONArray groupinfo;
             if(SendRequest.mock){
                 groupinfo=new JSONArray("[{\"gid\":\"1\",\"gtag\":\"taxi\",\"gtitle\":\"go XJTLU\",\"gdescription\":\"gogogogo\",\"gnumber\":\"8\",\"gnownum\":\"4\",\"gleaderid\":\"001\"},{\"gid\":\"2\",\"gtag\":\"study\",\"gtitle\":\"CAN301\",\"gdescription\":\"study together\",\"gnumber\":\"6\",\"gnownum\":\"3\",\"gleaderid\":\"003\"},{\"gid\":\"3\",\"gtag\":\"taxi\",\"gtitle\":\"go Moon\",\"gdescription\":\"travel to the moon\",\"gnumber\":\"4\",\"gnownum\":\"3\",\"gleaderid\":\"005\"}]");
-            }else{
-                groupinfo=(JSONArray)jsonObject.get("data");
-            }
-            try {
                 displayGroups(groupinfo);
-            }catch (JSONException e){
-                e.printStackTrace();
+            }else{
+
+                groupinfo=jsonObject.getJSONArray("data");
+                displayGroups(groupinfo);
+
             }
+
 //            System.out.println(groupinfo.toString());
         }catch (JSONException e){
             e.printStackTrace();
