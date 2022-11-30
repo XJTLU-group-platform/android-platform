@@ -217,6 +217,9 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         });
                         SL_GroupCards.addView(view);
+                        TextView blackbox=new TextView(HomeActivity.this);
+                        blackbox.setHeight(10);
+                        SL_GroupCards.addView(blackbox);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

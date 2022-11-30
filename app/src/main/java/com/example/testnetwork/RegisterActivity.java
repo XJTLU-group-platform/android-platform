@@ -134,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
             String uname;
             if(SendRequest.mock){
                 uid="mock0149"; // 模拟
-                uname="UserName";
+                uname="John";
             }else{
                 uid=jsonObject.getString("uid"); // 实际
                 uname=jsonObject.getString("uname");
