@@ -110,7 +110,23 @@
             </HorizontalScrollView>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/nonetworkbox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="80px"
+                android:textSize="40px"
+                android:orientation="vertical"
+                android:text="Can not get infomation, Check Your Backend Server!">
 
+            </TextView>
+        </LinearLayout>
         <!--    CardViews-->
         <LinearLayout
             android:layout_width="match_parent"

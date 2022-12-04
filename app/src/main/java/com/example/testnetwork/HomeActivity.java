@@ -55,8 +55,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         // 显示uid
-        ToastUtil.showMsg(HomeActivity.this, "Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
-        System.out.println("Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
+//        ToastUtil.showMsg(HomeActivity.this, "Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
+//        System.out.println("Uid stored in disk: "+UidStorage.getUid(HomeActivity.this));
         mIbHead = findViewById(R.id.userImage);
         SlideUserName=findViewById(R.id.userName_slide);
         slideMenu = findViewById(R.id.slideMenu);
@@ -202,6 +202,7 @@ public class HomeActivity extends AppCompatActivity {
         HomeActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                findViewById(R.id.nonetworkbox).setVisibility(View.GONE);
                 SL_GroupCards.removeAllViews();
                 for(int i = 0; i < groupinfo.length(); i++){
                     try {
