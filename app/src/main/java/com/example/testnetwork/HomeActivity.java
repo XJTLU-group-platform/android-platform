@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -46,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button Tag_Activity;
     private Button Tag_My;
 
+    BatteryReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,13 @@ public class HomeActivity extends AppCompatActivity {
         Tag_Carpool=findViewById(R.id.tag_Carpool);
         Tag_Activity=findViewById(R.id.tag_Activity);
         Tag_My=findViewById(R.id.myGroupBtn_slide);
+
+//        注册电量低广播
+        receiver=new BatteryReceiver();
+        String action= Intent.ACTION_BATTERY_CHANGED;
+        IntentFilter intentFilter =new IntentFilter();
+        intentFilter.addAction(action);
+        registerReceiver(receiver,intentFilter);
 
         mIbHead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +113,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
         SlideUserName.setText(UidStorage.getUname(HomeActivity.this));
         requestForGroups();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     // 标签栏点击和侧滑栏my group点击
