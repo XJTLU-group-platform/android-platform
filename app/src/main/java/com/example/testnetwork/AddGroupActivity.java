@@ -112,6 +112,16 @@ public class AddGroupActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void stopEdit(EditText dom){
 //        dom.setEnabled(false);
         dom.setFocusable(false);

@@ -63,7 +63,7 @@ public class SlideMenu extends FrameLayout {
     }
 
     /**
-     * 处理屏幕滑动事件
+     * Scrolling Event
      */
     private int downX;
     public boolean onTouchEvent(MotionEvent event) {
@@ -103,8 +103,6 @@ public class SlideMenu extends FrameLayout {
         invalidate();
     }
     /**
-     * Scroller不主动去调用这个方法
-     * 而invalidate()可以调用这个方法
      * invalidate->draw->computeScroll
      */
     public void computeScroll(){
