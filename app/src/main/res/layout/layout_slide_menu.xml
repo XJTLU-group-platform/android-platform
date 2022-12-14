@@ -18,7 +18,7 @@
             android:layout_height="60dp"
             android:layout_marginLeft="20dp"
             android:background="@drawable/user_image"
-            android:src="@drawable/circle_images"
+            android:src="@drawable/circle_images_darker"
             android:scaleType="centerCrop"/>
 
         <TextView
@@ -45,6 +45,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:onClick="tagsclick"
+            android:textSize="18sp"
             android:text="My Group" />
 
         <Button
@@ -53,7 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:text="Exit" />
+            android:text="Exit"
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </LinearLayout>
