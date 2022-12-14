@@ -121,18 +121,18 @@ public class HomeActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
 
-    // 标签栏点击和侧滑栏my group点击
+    // TAB bar click and sidebar click my group
     public void tagsclick(View view){
         requestForGroups(view);
     }
 
-    // 发起网络请求请求小组列表
+    // Initiate a network request request group list
     private void requestForGroups(){
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), "{}");
         SendRequest.sendRequestsWithOkHttp(requestBody,"/group/search",this::onHomeResponse,HomeActivity.this);
     }
     private void requestForGroups(View view){
-        // 构造请求参数
+        // Construct request parameters
         RequestBody requestBody;
         JSONObject json=new JSONObject();;
         int viewid=view.getId();

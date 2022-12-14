@@ -125,18 +125,18 @@ public class RegisterActivity extends AppCompatActivity {
         return gender;
     }
 
-    // 注册请求的回调，输入的是一个json类型的响应参数
+    // Register the request's callback, which is entered as a response parameter of type json
     private String onResponse(JSONObject jsonObject){
         try{
-            // 如果成功
-            // 把uid保存到本地
+            // if success
+            // store uid to local
             String uid;
             String uname;
             if(SendRequest.mock){
-                uid="mock0149"; // 模拟
+                uid="mock0149"; // mock
                 uname="John";
             }else{
-                uid=jsonObject.getString("uid"); // 实际
+                uid=jsonObject.getString("uid"); // fact
                 uname=jsonObject.getString("uname");
             }
             UidStorage.saveUid(uid,RegisterActivity.this);

@@ -165,7 +165,7 @@ public class AddGroupActivity extends AppCompatActivity {
             public void run() {
                 try{
                     JSONObject jsonObject=cjsonObject;
-                    // 如果成功
+                    // if success
                     if(SendRequest.mock){
                         jsonObject=new JSONObject("{\"gtag\":\"Carpool 拼车\",\"gtitle\":\"[Mock]taxi\",\"gdescription\":\"The idea is taking a taxi go XJTLU\",\"gnumber\":\"18\",\"gnownum\":\"3\",\"role\":\"visitor\"}");
                     }
